@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gemini/message.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
@@ -20,8 +21,11 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    // model = GenerativeModel(
+    //     model: 'gemini-pro', apiKey: const String.fromEnvironment('api_key'));
     model = GenerativeModel(
-        model: 'gemini-pro', apiKey: const String.fromEnvironment('api_key'));
+        model: 'gemini-pro',
+        apiKey: const String.fromEnvironment('api_key'));
     chatSession = model.startChat();
   }
 
@@ -69,14 +73,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       onSubmitted: sendChatMessage,
                     ),
                   ),
-                  IconButton(
-                      onPressed: () {
-                        sendChatMessage(textController.text);
-                      },
-                      icon: const Icon(
-                        Icons.send,
-                        color: Colors.indigo,
-                      ))
+                  const SizedBox(
+                    height: 15,
+                  )
                 ],
               ),
             )
@@ -108,15 +107,25 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> sendChatMessage(String message) async {
-    print(message);
+    if (kDebugMode) {
+      print(message);
+    }
     setState(() {
       loading = true;
     });
 
     try {
+      if (kDebugMode) {
+        print(
+            "/////////////////////////////////$message//////////////////////////////////");
+      }
       final response = await chatSession.sendMessage(
         Content.text(message),
       );
+      if (kDebugMode) {
+        print(
+            "/////////////////////////////////$message//////////////////////////////////");
+      }
       final text = response.text;
       if (text == null) {
         showError('No response from API');
