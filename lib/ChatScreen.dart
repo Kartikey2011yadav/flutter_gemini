@@ -8,6 +8,7 @@ class ChatScreen extends StatefulWidget {
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
+
 class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
@@ -19,11 +20,13 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 }
+
 class ChatWidget extends StatefulWidget {
   const ChatWidget({super.key});
   @override
   State<ChatWidget> createState() => _ChatWidgetState();
 }
+
 class _ChatWidgetState extends State<ChatWidget> {
   late final GenerativeModel _model;
   late final ChatSession _chat;
@@ -41,9 +44,10 @@ class _ChatWidgetState extends State<ChatWidget> {
     );
     _chat = _model.startChat();
   }
+
   void _scrollDown() {
     WidgetsBinding.instance.addPostFrameCallback(
-          (_) => _scrollController.animateTo(
+      (_) => _scrollController.animateTo(
         _scrollController.position.maxScrollExtent,
         duration: const Duration(
           milliseconds: 750,
@@ -52,6 +56,7 @@ class _ChatWidgetState extends State<ChatWidget> {
       ),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     var textFieldDecoration = InputDecoration(
@@ -83,25 +88,25 @@ class _ChatWidgetState extends State<ChatWidget> {
           Expanded(
             child: _apiKey.isNotEmpty
                 ? ListView.builder(
-              controller: _scrollController,
-              itemBuilder: (context, idx) {
-                var content = _chat.history.toList()[idx];
-                var text = content.parts
-                    .whereType<TextPart>()
-                    .map<String>((e) => e.text)
-                    .join('');
-                return MessageWidget(
-                  text: text,
-                  isFromUser: content.role == 'user',
-                );
-              },
-              itemCount: _chat.history.length,
-            )
+                    controller: _scrollController,
+                    itemBuilder: (context, idx) {
+                      var content = _chat.history.toList()[idx];
+                      var text = content.parts
+                          .whereType<TextPart>()
+                          .map<String>((e) => e.text)
+                          .join('');
+                      return MessageWidget(
+                        text: text,
+                        isFromUser: content.role == 'user',
+                      );
+                    },
+                    itemCount: _chat.history.length,
+                  )
                 : ListView(
-              children: const [
-                Text('No API key found. Please provide an API Key.'),
-              ],
-            ),
+                    children: const [
+                      Text('No API key found. Please provide an API Key.'),
+                    ],
+                  ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(
@@ -143,6 +148,7 @@ class _ChatWidgetState extends State<ChatWidget> {
       ),
     );
   }
+
   Future<void> _sendChatMessage(String message) async {
     setState(() {
       _loading = true;
@@ -174,6 +180,7 @@ class _ChatWidgetState extends State<ChatWidget> {
       _textFieldFocus.requestFocus();
     }
   }
+
   void _showError(String message) {
     showDialog(
       context: context,
@@ -196,6 +203,7 @@ class _ChatWidgetState extends State<ChatWidget> {
     );
   }
 }
+
 class MessageWidget extends StatelessWidget {
   final String text;
   final bool isFromUser;
@@ -208,7 +216,7 @@ class MessageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment:
-      isFromUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+          isFromUser ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: [
         Flexible(
           child: Container(
